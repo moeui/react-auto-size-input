@@ -1,3 +1,5 @@
+[![release](https://github.com/moeui/react-auto-size-input/actions/workflows/release.yml/badge.svg)](https://github.com/moeui/react-auto-size-input/actions/workflows/release.yml)
+
 # react-auto-size-input
 
 Adjust the width according to the text, and can reach a certain length to reduce the font size.
