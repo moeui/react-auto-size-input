@@ -19,8 +19,8 @@ Adjust the width according to the text, and can reach a certain length to reduce
 | value          | input value                                         | `string`                            | `'0'`      |
 | onChange       | Triggered when the input content is changed         | `(value: string) => void`           | -          |
 | className      | Input class name                                    | `string`                            | -          |
-| prefix         | The prefix icon for the Input                       | `() => React.ReactElement | string` | -          |
-| suffix         | The suffix dom for the Input	                       | `() => React.ReactElement | string` | -          |
+| prefix         | The prefix icon for the Input                       | `() => string | React.ReactElement` | -          |
+| suffix         | The suffix dom for the Input	                       | `() => string | React.ReactElement` | -          |
 | maxLength      | The maximum number of characters the user can enter | `number`                            | 20         |
 | shrink         | Text shrinks the length limit                       | `number`                            | 12         |
 | shrinkFontSize | Text shrinks font size                              | `number`                            | 26         |
