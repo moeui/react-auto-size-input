@@ -42,7 +42,7 @@ function filterInput(val: string): string {
 
 export default function (props: IProps): React.ReactElement | null {
     const InputRef = useRef<HTMLInputElement>(null)
-    const [value, setValue] = useState()
+    const [value, setValue] = useState<string>()
     const [width, setWidth] = useState(0)
     const shrink = props.shrink || 12
     const shrinkFontSize = props.shrinkFontSize || 26
