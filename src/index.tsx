@@ -42,17 +42,20 @@ function filterInput(val: string): string {
 
 export default function (props: IProps): React.ReactElement | null {
     const InputRef = useRef<HTMLInputElement>(null)
-    const [value, setValue] = useState(props.value)
+    const [value, setValue] = useState()
     const [width, setWidth] = useState(0)
     const shrink = props.shrink || 12
     const shrinkFontSize = props.shrinkFontSize || 26
     const fontSize = props.fontSize || 36
 
     useEffect(() => {
+        if(props.value){
+            setValue(props.value)
+        }
         if (props.onChange) {
             props.onChange(value)
         }
-    }, [value])
+    }, [props.value])
 
     useEffect(() => {
         if (InputRef.current) {
