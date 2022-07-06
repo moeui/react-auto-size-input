@@ -1,6 +1,6 @@
 import classnames from 'classnames'
 import * as React from 'react'
-import { useEffect, useState, useRef } from 'react'
+import { forwardRef, useEffect, useState, useRef, useImperativeHandle } from 'react'
 
 import style from './index.stylus'
 
@@ -40,7 +40,11 @@ function filterInput(val: string): string {
     return Number(v) >= 0 ? v : ''
 }
 
-export default function (props: IProps): React.ReactElement | null {
+export interface IInput {
+    setValue(val: string): void
+}
+
+export default forwardRef((props: IProps , ref) => {
     const InputRef = useRef<HTMLInputElement>(null)
     const [value, setValue] = useState<string>(props.value)
     const [width, setWidth] = useState(0)
@@ -48,14 +52,17 @@ export default function (props: IProps): React.ReactElement | null {
     const shrinkFontSize = props.shrinkFontSize || 26
     const fontSize = props.fontSize || 36
 
-    useEffect(() => {
-        if(props.value){
-            setValue(props.value)
+    useImperativeHandle(ref, () => ({
+        setValue: (val: string) => {
+            setValue(val)
         }
+    }))
+
+    useEffect(() => {
         if (props.onChange) {
             props.onChange(value)
         }
-    }, [props.value])
+    }, [value])
 
     useEffect(() => {
         if (InputRef.current) {
@@ -63,7 +70,7 @@ export default function (props: IProps): React.ReactElement | null {
             inputFontStyle.splice(1, 1, `${fontSize}px`)
             setWidth(measureText('0', inputFontStyle.join(' ')))
         }
-    }, [InputRef])
+    }, [InputRef, value])
 
     return (
         <div className={classnames(style.input, props.className)} onClick={() => InputRef.current?.focus()}>
@@ -87,5 +94,5 @@ export default function (props: IProps): React.ReactElement | null {
             {props.suffix}
         </div>
     )
-}
+})
 
