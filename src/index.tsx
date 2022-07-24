@@ -1,6 +1,6 @@
 import classnames from 'classnames'
 import * as React from 'react'
-import { forwardRef, useEffect, useState, useRef, useImperativeHandle } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 import style from './index.stylus'
 
@@ -14,6 +14,7 @@ type IProps = {
     shrink?: number
     shrinkFontSize?: number
     fontSize?: number
+    defaultValue?: string
 }
 
 let tCanvas: HTMLCanvasElement
@@ -44,33 +45,33 @@ export interface IInput {
     setValue(val: string): void
 }
 
-export default forwardRef((props: IProps , ref) => {
+export default (props: IProps) => {
     const InputRef = useRef<HTMLInputElement>(null)
-    const [value, setValue] = useState<string>(props.value)
+    const defaultValue = props?.defaultValue || '0'
+    const [value, setValue] = useState<string>(defaultValue)
     const [width, setWidth] = useState(0)
     const shrink = props.shrink || 12
     const shrinkFontSize = props.shrinkFontSize || 26
     const fontSize = props.fontSize || 36
 
-    useImperativeHandle(ref, () => ({
-        setValue: (val: string) => {
-            setValue(val)
-        }
-    }))
+    const handleWidth = (str: string): void => {
+        if (!InputRef.current) return
+        const inputFontStyle = window.getComputedStyle(InputRef.current, null).getPropertyValue('font').split(' ')
+        inputFontStyle.splice(1, 1, `${str.length > shrink ? shrinkFontSize : fontSize}px`)
+        setWidth(measureText(str, inputFontStyle.join(' ')))
+    }
 
     useEffect(() => {
-        if (props.onChange) {
-            props.onChange(value)
-        }
-    }, [value])
+        const val = filterInput(props.value) || defaultValue
+        setValue(val)
+        handleWidth(val)
+    }, [props.value])
 
     useEffect(() => {
-        if (InputRef.current) {
-            const inputFontStyle = window.getComputedStyle(InputRef.current, null).getPropertyValue('font').split(' ')
-            inputFontStyle.splice(1, 1, `${fontSize}px`)
-            setWidth(measureText('0', inputFontStyle.join(' ')))
-        }
-    }, [InputRef, value])
+        handleWidth(value)
+    }, [InputRef.current])
+
+    console.log(width)
 
     return (
         <div className={classnames(style.input, props.className)} onClick={() => InputRef.current?.focus()}>
@@ -78,11 +79,12 @@ export default forwardRef((props: IProps , ref) => {
             <input
                 value={value}
                 onChange={e => {
-                    const value = filterInput(e.target.value) || '0'
-                    const inputFontStyle = window.getComputedStyle(e.target, null).getPropertyValue('font').split(' ')
-                    inputFontStyle.splice(1, 1, `${value.length > shrink ? shrinkFontSize : fontSize}px`)
-                    setWidth(measureText(value, inputFontStyle.join(' ')))
-                    setValue(value)
+                    const val = filterInput(e.target.value) || defaultValue
+                    handleWidth(val)
+                    setValue(val)
+                    if (props.onChange) {
+                        props.onChange(val)
+                    }
                 }}
                 style={{
                     width,
@@ -94,5 +96,5 @@ export default forwardRef((props: IProps , ref) => {
             {props.suffix}
         </div>
     )
-})
+}
 

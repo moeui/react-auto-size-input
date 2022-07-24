@@ -27,3 +27,4 @@ Adjust the width according to the text, and can reach a certain length to reduce
 | shrink         | Text shrinks the length limit                       | `number`                             | 12         |
 | shrinkFontSize | Text shrinks font size                              | `number`                             | 26         |
 | fontSize 	     | Text font size                                      | `number`                             | 36         |
+| defaultValue   | input value is empty displayed value                | `string`                             | `'0'`      |

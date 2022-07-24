@@ -9,6 +9,12 @@ const App = () => {
   return (
     <div>
       <Input value={value} onChange={val => setValue(val)} className="input" suffix={<div>RMB</div>} prefix={<div>Balance: </div>} />
+      <div>
+        cur: {value}
+      </div>
+      <button onClick={()=>setValue('1000')}>
+        set value 1000
+      </button>
     </div>
   );
 };
