@@ -9,3 +9,5 @@
         font-size: 32px
         line-height: 48px
         font-weight: 500
+        background: var(--background)
+        color: var(--color)

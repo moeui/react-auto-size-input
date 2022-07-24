@@ -1,12 +1,14 @@
 import classnames from 'classnames'
 import * as React from 'react'
-import { useEffect, useState, useRef } from 'react'
+import { useState, forwardRef, useImperativeHandle, useRef, useEffect } from 'react'
 
 import style from './index.stylus'
+import { NativeProps, withNativeProps } from './native-props'
 
 type IProps = {
-    className?: string,
     onChange?: (value: string) => void,
+    onEnterPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void,
+    onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void,
     value: string
     prefix?: React.ReactElement | string
     suffix?: React.ReactElement | string
@@ -15,7 +17,7 @@ type IProps = {
     shrinkFontSize?: number
     fontSize?: number
     defaultValue?: string
-}
+} & NativeProps<'--background' | '--color'>
 
 let tCanvas: HTMLCanvasElement
 function measureText(text: string, font: string): number {
@@ -41,11 +43,13 @@ function filterInput(val: string): string {
     return Number(v) >= 0 ? v : ''
 }
 
-export interface IInput {
-    setValue(val: string): void
+export interface InputRef {
+    focus: () => void
+    blur: () => void
+    clear: () => void
 }
 
-export default (props: IProps) => {
+export default forwardRef<InputRef, IProps>((props, ref) => {
     const InputRef = useRef<HTMLInputElement>(null)
     const defaultValue = props?.defaultValue || '0'
     const [value, setValue] = useState<string>(defaultValue)
@@ -61,6 +65,25 @@ export default (props: IProps) => {
         setWidth(measureText(str, inputFontStyle.join(' ')))
     }
 
+    const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (props.onEnterPress && (e.code === 'Enter' || e.keyCode === 13)) {
+            props.onEnterPress(e)
+        }
+        props.onKeyDown?.(e)
+    }
+
+    useImperativeHandle(ref, () => ({
+        clear: () => {
+            setValue(defaultValue)
+        },
+        focus: () => {
+            InputRef.current?.focus()
+        },
+        blur: () => {
+            InputRef.current?.blur()
+        }
+    }))
+
     useEffect(() => {
         const val = filterInput(props.value) || defaultValue
         setValue(val)
@@ -71,13 +94,12 @@ export default (props: IProps) => {
         handleWidth(value)
     }, [InputRef.current])
 
-    console.log(width)
-
-    return (
+    return withNativeProps(props,(
         <div className={classnames(style.input, props.className)} onClick={() => InputRef.current?.focus()}>
             {props.prefix}
             <input
                 value={value}
+                onKeyDown={handleKeydown}
                 onChange={e => {
                     const val = filterInput(e.target.value) || defaultValue
                     handleWidth(val)
@@ -95,6 +117,6 @@ export default (props: IProps) => {
             />
             {props.suffix}
         </div>
-    )
-}
+    ))
+})
 

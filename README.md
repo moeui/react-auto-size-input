@@ -20,6 +20,7 @@ Adjust the width according to the text, and can reach a certain length to reduce
 | -------------- | --------------------------------------------------- | ------------------------------------ | ---------- |
 | value          | input value                                         | `string`                             | `'0'`      |
 | onChange       | Triggered when the input content is changed         | `(value: string) => void`            | -          |
+| onKeyDown      | Triggered when the input content is onKeyDowned     | `(e: KeyboardEvent) => void`         | -          |
 | className      | Input class name                                    | `string`                             | -          |
 | prefix         | The prefix icon for the Input                       | `() => React.ReactElement \| string` | -          |
 | suffix         | The suffix dom for the Input	                       | `() => React.ReactElement \| string` | -          |
@@ -28,3 +29,18 @@ Adjust the width according to the text, and can reach a certain length to reduce
 | shrinkFontSize | Text shrinks font size                              | `number`                             | 26         |
 | fontSize 	     | Text font size                                      | `number`                             | 36         |
 | defaultValue   | input value is empty displayed value                | `string`                             | `'0'`      |
+
+## Ref
+
+| Name          | Description                  | Type                         |
+| ------------- | ---------------------------- | ---------------------------- |
+| blur          | Let the input box lose focus | `() => void`                 |
+| clear         | Clear the input content      | `() => void`                 |
+| focus         | Let the input box get focus  | `() => void`                 |
+
+### CSS Variables
+
+| Name                | Description             | Default                  |
+| ------------------- | ----------------------- | ------------------------ |
+| --color             | Text color.             | -                        | 
+| --background        | The input background    | -                        | 
