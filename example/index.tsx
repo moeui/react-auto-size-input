@@ -8,7 +8,7 @@ const App = () => {
   const [value, setValue] = useState('0')
   return (
     <div>
-      <Input value={value} onChange={val => setValue(val)} className="input" suffix={<div>RMB</div>} prefix={<div>Balance: </div>} style={{ '--background': '#ddd', '--color': 'red' }} />
+      <Input value={value} onChange={val => setValue(val)} className="input" suffix={<div>RMB</div>} prefix={<div>Balance: </div>} style={{ '--background': '#ddd' }} />
       <div>
         cur: {value}
       </div>

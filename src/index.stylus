@@ -1,6 +1,10 @@
+
 .input
     display: flex
     align-items: flex-end
+
+    --background: #fff
+    --color: #000
 
     input
         outline: 0

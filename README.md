@@ -42,5 +42,5 @@ Adjust the width according to the text, and can reach a certain length to reduce
 
 | Name                | Description             | Default                  |
 | ------------------- | ----------------------- | ------------------------ |
-| --color             | Text color.             | -                        | 
-| --background        | The input background    | -                        | 
+| --color             | Text color.             | #000                     | 
+| --background        | The input background    | #fff                     | 
