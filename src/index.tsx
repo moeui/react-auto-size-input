@@ -23,12 +23,10 @@ let tCanvas: HTMLCanvasElement
 function measureText(text: string, font: string): number {
     const canvas = tCanvas || (tCanvas = document.createElement('canvas'))
     const context = canvas.getContext('2d')
-    if (context) {
-        context.font = font
-        const metrics = context.measureText(text)
-        return metrics.width
-    }
-    return 0
+    if(!context) return 0
+    context.font = font
+    const metrics = context.measureText(text)
+    return metrics.width
 }
 
 
@@ -60,9 +58,11 @@ export default forwardRef<InputRef, IProps>((props, ref) => {
 
     const handleWidth = (str: string): void => {
         if (!InputRef.current) return
-        const inputFontStyle = window.getComputedStyle(InputRef.current, null).getPropertyValue('font').split(' ')
-        inputFontStyle.splice(1, 1, `${str.length > shrink ? shrinkFontSize : fontSize}px`)
-        setWidth(measureText(str, inputFontStyle.join(' ')))
+        const inputStyle = window.getComputedStyle(InputRef.current, null)
+        const lineHeight = inputStyle.getPropertyValue('line-height')
+        const fontWeight = inputStyle.getPropertyValue('font-weight')
+        const fontFamily = inputStyle.getPropertyValue('font-family')
+        setWidth(measureText(str, `${fontWeight} ${str.length > shrink ? shrinkFontSize : fontSize}px / ${lineHeight} ${fontFamily}`))
     }
 
     const handleKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
